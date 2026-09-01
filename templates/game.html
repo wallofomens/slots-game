@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -12,96 +13,301 @@
     <title>Teo Test Slot</title>
 
     <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #161821;
-            color: white;
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #292d3e,
+                    #12141c 65%
+                );
+
+            color: #ffffff;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
             display: flex;
             justify-content: center;
-            padding-top: 70px;
+
+            padding:
+                50px
+                20px;
         }
+
 
         .game {
-            width: 500px;
-            max-width: 92vw;
+            width: 560px;
+            max-width: 100%;
+        }
+
+
+        .title {
             text-align: center;
-        }
 
-        h1 {
-            margin-bottom: 30px;
-        }
-
-        .reels {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-
-        .reel {
-            width: 110px;
-            height: 110px;
-            background: white;
-            color: black;
-            border-radius: 12px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 55px;
-        }
-
-        button {
-            width: 220px;
-            padding: 16px;
-
-            font-size: 20px;
+            font-size: 32px;
             font-weight: bold;
 
-            border: 0;
-            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+
+        .subtitle {
+            text-align: center;
+
+            color: #aeb4c4;
+
+            margin-bottom: 30px;
+        }
+
+
+        .slot-machine {
+            background: #202330;
+
+            border:
+                1px solid
+                #3a3f51;
+
+            border-radius: 18px;
+
+            padding: 28px;
+        }
+
+
+        .mode-banner {
+            margin-bottom: 22px;
+
+            padding:
+                11px
+                15px;
+
+            border-radius: 8px;
+
+            text-align: center;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+            background: #303442;
+        }
+
+
+        .mode-banner.free {
+            background: #21412c;
+            color: #97efa9;
+        }
+
+
+        .mode-banner.cash {
+            background: #39372a;
+            color: #f0d77b;
+        }
+
+
+        .reels {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+
+            margin-bottom: 24px;
+        }
+
+
+        .reel {
+            aspect-ratio: 1;
+
+            background:
+                linear-gradient(
+                    #ffffff,
+                    #e7e8ec
+                );
+
+            color: #111111;
+
+            border-radius: 13px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 64px;
+
+            box-shadow:
+                inset 0 0 18px
+                rgba(0, 0, 0, 0.15);
+        }
+
+
+        #spinButton {
+            width: 100%;
+
+            min-height: 64px;
+
+            border: none;
+            border-radius: 12px;
+
+            background: #e8be3c;
+            color: #171717;
+
+            font-size: 23px;
+            font-weight: bold;
 
             cursor: pointer;
 
-            background: #f0c040;
+            transition:
+                transform 0.08s,
+                opacity 0.15s;
         }
 
-        button:disabled {
-            opacity: 0.5;
-            cursor: default;
+
+        #spinButton:hover {
+            transform:
+                translateY(-1px);
         }
+
+
+        #spinButton:active {
+            transform:
+                translateY(1px);
+        }
+
+
+        #spinButton:disabled {
+            opacity: 0.45;
+            cursor: wait;
+            transform: none;
+        }
+
+
+        #spinButton.free-spin {
+            background: #62d67a;
+        }
+
+
+        .message {
+            min-height: 55px;
+
+            margin-top: 20px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+
+        .message.win {
+            color: #7fec91;
+        }
+
+
+        .message.error {
+            color: #ff8888;
+        }
+
 
         .info {
-            margin-top: 30px;
+            margin-top: 10px;
 
-            background: #232633;
-            border-radius: 12px;
+            padding-top: 20px;
 
-            padding: 20px;
-
-            text-align: left;
+            border-top:
+                1px solid
+                #3c4050;
         }
+
 
         .row {
             display: flex;
+
             justify-content: space-between;
+            align-items: center;
 
-            padding: 5px 0;
+            gap: 20px;
+
+            padding:
+                7px
+                0;
         }
 
-        #message {
-            height: 30px;
-            margin: 20px;
-            font-size: 18px;
+
+        .row .label {
+            color: #aeb4c4;
         }
 
-        .free {
-            color: #7fe39a;
+
+        .row .value {
             font-weight: bold;
+            text-align: right;
         }
+
+
+        #freeSpins {
+            color: #8ceba0;
+        }
+
+
+        .debug {
+            margin-top: 24px;
+
+            padding: 16px;
+
+            background: #171922;
+
+            border-radius: 10px;
+
+            font-size: 12px;
+
+            color: #9ba2b4;
+
+            word-break: break-all;
+        }
+
+
+        .debug-title {
+            color: white;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+
+        @media (max-width: 500px) {
+
+            body {
+                padding:
+                    24px
+                    12px;
+            }
+
+            .slot-machine {
+                padding: 18px;
+            }
+
+            .reel {
+                font-size: 46px;
+            }
+        }
+
     </style>
+
 </head>
 
 
@@ -109,69 +315,172 @@
 
 <div class="game">
 
-    <h1>🎰 Teo Test Slot</h1>
+    <div class="title">
+        🎰 Teo Test Slot
+    </div>
 
-
-    <div class="reels">
-
-        <div
-            id="reel1"
-            class="reel"
-        >
-            🍒
-        </div>
-
-        <div
-            id="reel2"
-            class="reel"
-        >
-            🍋
-        </div>
-
-        <div
-            id="reel3"
-            class="reel"
-        >
-            🔔
-        </div>
-
+    <div class="subtitle">
+        Leopard GS API Test Game
     </div>
 
 
-    <button id="spinButton">
-        SPIN
-    </button>
+    <div class="slot-machine">
 
-
-    <div id="message">
-        Loading session...
-    </div>
-
-
-    <div class="info">
-
-        <div class="row">
-            <span>Balance</span>
-            <span id="balance">
-                -
-            </span>
+        <div
+            id="modeBanner"
+            class="mode-banner"
+        >
+            CONNECTING...
         </div>
 
-        <div class="row">
-            <span>Free spins</span>
-            <span
-                id="freeSpins"
-                class="free"
+
+        <div class="reels">
+
+            <div
+                id="reel1"
+                class="reel"
             >
-                -
-            </span>
+                🍒
+            </div>
+
+            <div
+                id="reel2"
+                class="reel"
+            >
+                🍋
+            </div>
+
+            <div
+                id="reel3"
+                class="reel"
+            >
+                🔔
+            </div>
+
         </div>
 
-        <div class="row">
-            <span>Bet</span>
-            <span id="betAmount">
-                -
-            </span>
+
+        <button
+            id="spinButton"
+            disabled
+        >
+            LOADING...
+        </button>
+
+
+        <div
+            id="message"
+            class="message"
+        >
+            Checking session...
+        </div>
+
+
+        <div class="info">
+
+            <div class="row">
+
+                <span class="label">
+                    Balance
+                </span>
+
+                <span
+                    id="balance"
+                    class="value"
+                >
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Free spins remaining
+                </span>
+
+                <span
+                    id="freeSpins"
+                    class="value"
+                >
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Current bet
+                </span>
+
+                <span
+                    id="betAmount"
+                    class="value"
+                >
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Last win
+                </span>
+
+                <span
+                    id="lastWin"
+                    class="value"
+                >
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label">
+                    Spin type
+                </span>
+
+                <span
+                    id="spinType"
+                    class="value"
+                >
+                    -
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="debug">
+
+            <div class="debug-title">
+                Launch information
+            </div>
+
+            <div>
+                Account:
+                <span id="debugAccount"></span>
+            </div>
+
+            <div>
+                Game:
+                <span id="debugGame"></span>
+            </div>
+
+            <div>
+                Launch has_freerounds:
+                <span id="debugLaunchFreerounds"></span>
+            </div>
+
         </div>
 
     </div>
@@ -182,17 +491,49 @@
 <script>
 
 const launch = {
+
     account_id:
         "{{ launch.account_id }}",
 
     session_id:
         "{{ launch.session_id }}",
 
-    game_id: "1",
+    game_id:
+        "{{ launch.game_id }}",
 
     currency:
-        "{{ launch.currency }}"
+        "{{ launch.currency }}",
+
+    launch_has_freerounds:
+        "{{ launch.has_freerounds }}" === "1"
+
 };
+
+
+const symbols = [
+    "🍒",
+    "🍋",
+    "🔔",
+    "💎",
+    "7️⃣",
+    "⭐"
+];
+
+
+const reel1 =
+    document.getElementById(
+        "reel1"
+    );
+
+const reel2 =
+    document.getElementById(
+        "reel2"
+    );
+
+const reel3 =
+    document.getElementById(
+        "reel3"
+    );
 
 
 const spinButton =
@@ -201,14 +542,10 @@ const spinButton =
     );
 
 
-const reel1 =
-    document.getElementById("reel1");
-
-const reel2 =
-    document.getElementById("reel2");
-
-const reel3 =
-    document.getElementById("reel3");
+const messageElement =
+    document.getElementById(
+        "message"
+    );
 
 
 const balanceElement =
@@ -216,20 +553,55 @@ const balanceElement =
         "balance"
     );
 
+
 const freeSpinsElement =
     document.getElementById(
         "freeSpins"
     );
+
 
 const betAmountElement =
     document.getElementById(
         "betAmount"
     );
 
-const messageElement =
+
+const lastWinElement =
     document.getElementById(
-        "message"
+        "lastWin"
     );
+
+
+const spinTypeElement =
+    document.getElementById(
+        "spinType"
+    );
+
+
+const modeBanner =
+    document.getElementById(
+        "modeBanner"
+    );
+
+
+document.getElementById(
+    "debugAccount"
+).textContent =
+    launch.account_id;
+
+
+document.getElementById(
+    "debugGame"
+).textContent =
+    launch.game_id;
+
+
+document.getElementById(
+    "debugLaunchFreerounds"
+).textContent =
+    launch.launch_has_freerounds
+        ? "1"
+        : "0";
 
 
 function money(cents) {
@@ -242,46 +614,164 @@ function money(cents) {
     }
 
     return (
-        (cents / 100).toFixed(2)
+        (Number(cents) / 100)
+            .toFixed(2)
         + " "
         + launch.currency
     );
 }
 
 
+function setMessage(
+    text,
+    type = ""
+) {
+
+    messageElement.textContent =
+        text;
+
+    messageElement.className =
+        "message";
+
+    if (type) {
+        messageElement.classList.add(
+            type
+        );
+    }
+}
+
+
+function setFreeMode(
+    freerounds,
+    betAmount
+) {
+
+    modeBanner.textContent =
+        "FREE SPINS ACTIVE";
+
+    modeBanner.className =
+        "mode-banner free";
+
+
+    spinButton.textContent =
+        "FREE SPIN";
+
+    spinButton.classList.add(
+        "free-spin"
+    );
+
+
+    freeSpinsElement.textContent =
+        freerounds;
+
+
+    spinTypeElement.textContent =
+        "Freeround";
+
+
+    if (
+        betAmount !== undefined
+        && betAmount !== null
+    ) {
+
+        betAmountElement.textContent =
+            money(betAmount);
+    }
+}
+
+
+function setCashMode(
+    betAmount = 40
+) {
+
+    modeBanner.textContent =
+        "REGULAR CASH PLAY";
+
+    modeBanner.className =
+        "mode-banner cash";
+
+
+    spinButton.textContent =
+        "SPIN";
+
+
+    spinButton.classList.remove(
+        "free-spin"
+    );
+
+
+    freeSpinsElement.textContent =
+        "0";
+
+
+    spinTypeElement.textContent =
+        "Regular";
+
+
+    betAmountElement.textContent =
+        money(betAmount);
+}
+
+
 async function loadSession() {
+
+    spinButton.disabled = true;
+
+    setMessage(
+        "Checking session..."
+    );
+
 
     try {
 
-        const response = await fetch(
-            "/api/session",
-            {
-                method: "POST",
+        const response =
+            await fetch(
+                "/api/session",
+                {
+                    method: "POST",
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body: JSON.stringify({
-                    account_id:
-                        launch.account_id,
+                    body:
+                        JSON.stringify({
+                            account_id:
+                                launch.account_id,
 
-                    session_id:
-                        launch.session_id
-                })
-            }
-        );
+                            session_id:
+                                launch.session_id
+                        })
+                }
+            );
 
 
         const data =
             await response.json();
 
 
+        if (!response.ok) {
+
+            console.error(data);
+
+            setMessage(
+                data.error
+                || "Session request failed",
+                "error"
+            );
+
+            return;
+        }
+
+
         if (data.status !== "ok") {
 
-            messageElement.textContent =
-                "Session error";
+            setMessage(
+                data.status_descr
+                || "Session error",
+                "error"
+            );
 
             return;
         }
@@ -291,101 +781,180 @@ async function loadSession() {
             money(data.balance);
 
 
-        const freeRounds =
-            data.freeround_limit || 0;
+        const freerounds =
+            Number(
+                data.freeround_limit
+                || 0
+            );
 
 
-        freeSpinsElement.textContent =
-            freeRounds;
+        if (freerounds > 0) {
 
-
-        if (freeRounds > 0) {
-
-            const bet =
-                data.freeround_lines
+            const freeBet =
+                Number(
+                    data.freeround_lines
+                )
                 *
-                data
-                .freeround_bet_per_line_cents;
+                Number(
+                    data
+                    .freeround_bet_per_line_cents
+                );
 
 
-            betAmountElement.textContent =
-                money(bet);
+            setFreeMode(
+                freerounds,
+                freeBet
+            );
 
 
-            messageElement.textContent =
-                "Free Spin available!";
+            setMessage(
+                freerounds
+                + " free spins available"
+            );
 
         } else {
 
-            betAmountElement.textContent =
-                money(40);
+            setCashMode();
 
-            messageElement.textContent =
-                "Ready";
+            setMessage(
+                "Ready"
+            );
         }
 
 
+        spinButton.disabled =
+            false;
+
     } catch (error) {
 
-        messageElement.textContent =
-            "Failed to load session";
-
         console.error(error);
+
+        setMessage(
+            "Could not connect to game server",
+            "error"
+        );
     }
+}
+
+
+function randomVisualSymbol() {
+
+    return symbols[
+        Math.floor(
+            Math.random()
+            * symbols.length
+        )
+    ];
+}
+
+
+function startFakeReelAnimation() {
+
+    let count = 0;
+
+    return setInterval(
+        function () {
+
+            reel1.textContent =
+                randomVisualSymbol();
+
+            reel2.textContent =
+                randomVisualSymbol();
+
+            reel3.textContent =
+                randomVisualSymbol();
+
+            count++;
+
+        },
+        80
+    );
 }
 
 
 async function spin() {
 
-    spinButton.disabled = true;
-
-    messageElement.textContent =
-        "Spinning...";
+    spinButton.disabled =
+        true;
 
 
-    reel1.textContent = "❓";
-    reel2.textContent = "❓";
-    reel3.textContent = "❓";
+    setMessage(
+        "Spinning..."
+    );
+
+
+    const animation =
+        startFakeReelAnimation();
 
 
     try {
 
-        const response = await fetch(
-            "/api/spin",
-            {
-                method: "POST",
+        const response =
+            await fetch(
+                "/api/spin",
+                {
+                    method: "POST",
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body: JSON.stringify({
-                    account_id:
-                        launch.account_id,
+                    body:
+                        JSON.stringify({
+                            account_id:
+                                launch.account_id,
 
-                    session_id:
-                        launch.session_id,
+                            session_id:
+                                launch.session_id,
 
-                    game_id:
-                        launch.game_id
-                })
-            }
-        );
+                            game_id:
+                                launch.game_id
+                        })
+                }
+            );
 
 
         const data =
             await response.json();
 
 
-        if (!data.success) {
+        clearInterval(
+            animation
+        );
 
-            messageElement.textContent =
-                "Transaction failed";
+
+        if (!response.ok
+            || !data.success) {
 
             console.error(data);
 
-            spinButton.disabled = false;
+
+            reel1.textContent =
+                "❌";
+
+            reel2.textContent =
+                "❌";
+
+            reel3.textContent =
+                "❌";
+
+
+            setMessage(
+                (
+                    data.stage
+                        ? data.stage + ": "
+                        : ""
+                )
+                +
+                (
+                    data.error
+                    || data.leopard?.status_descr
+                    || "Transaction failed"
+                ),
+                "error"
+            );
+
 
             return;
         }
@@ -402,11 +971,9 @@ async function spin() {
 
 
         balanceElement.textContent =
-            money(data.balance);
-
-
-        freeSpinsElement.textContent =
-            data.freeround_limit ?? 0;
+            money(
+                data.balance
+            );
 
 
         betAmountElement.textContent =
@@ -415,40 +982,116 @@ async function spin() {
             );
 
 
-        if (
-            data.win_amount_cents > 0
-        ) {
-
-            messageElement.textContent =
-                "WIN! "
-                + money(
-                    data.win_amount_cents
-                );
-
-        } else {
-
-            messageElement.textContent =
-                "No win";
-        }
+        lastWinElement.textContent =
+            money(
+                data.win_amount_cents
+            );
 
 
         if (data.is_freeround) {
 
-            messageElement.textContent +=
-                " — Free Spin";
+            spinTypeElement.textContent =
+                "Freeround";
+
+        } else {
+
+            spinTypeElement.textContent =
+                "Regular";
+        }
+
+
+        if (
+            data.win_amount_cents > 0
+        ) {
+
+            setMessage(
+                "WIN! "
+                +
+                money(
+                    data.win_amount_cents
+                )
+                +
+                " — "
+                +
+                data.multiplier
+                +
+                "x",
+                "win"
+            );
+
+        } else {
+
+            setMessage(
+                "No win"
+                +
+                (
+                    data.is_freeround
+                        ? " — Free Spin"
+                        : ""
+                )
+            );
+        }
+
+
+        /*
+         * IMPORTANT:
+         *
+         * The server response reflects Leopard's state
+         * after BET + WIN.
+         *
+         * If freeround_limit is now zero / missing,
+         * we immediately switch the UI to cash mode.
+         */
+
+        const remaining =
+            Number(
+                data.freeround_limit
+                || 0
+            );
+
+
+        if (remaining > 0) {
+
+            setFreeMode(
+                remaining,
+                data.bet_amount_cents
+            );
+
+        } else {
+
+            setCashMode();
         }
 
 
     } catch (error) {
 
+        clearInterval(
+            animation
+        );
+
+
         console.error(error);
 
-        messageElement.textContent =
-            "Request failed";
+
+        reel1.textContent =
+            "❌";
+
+        reel2.textContent =
+            "❌";
+
+        reel3.textContent =
+            "❌";
+
+
+        setMessage(
+            "Request failed",
+            "error"
+        );
 
     } finally {
 
-        spinButton.disabled = false;
+        spinButton.disabled =
+            false;
     }
 }
 
@@ -459,9 +1102,32 @@ spinButton.addEventListener(
 );
 
 
+/*
+ * The URL's has_freerounds flag can give us an immediate hint
+ * before check_session returns, but we deliberately do NOT
+ * use it to decide transaction type.
+ */
+
+if (launch.launch_has_freerounds) {
+
+    modeBanner.textContent =
+        "FREE SPINS DETECTED — CHECKING...";
+
+    modeBanner.className =
+        "mode-banner free";
+
+} else {
+
+    modeBanner.textContent =
+        "CHECKING WALLET...";
+
+}
+
+
 loadSession();
 
 </script>
 
 </body>
+
 </html>
