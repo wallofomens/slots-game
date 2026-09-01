@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Teo Test Slot</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #161821;
+            color: white;
+            display: flex;
+            justify-content: center;
+            padding-top: 70px;
+        }
+
+        .game {
+            width: 500px;
+            max-width: 92vw;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .reels {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .reel {
+            width: 110px;
+            height: 110px;
+            background: white;
+            color: black;
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 55px;
+        }
+
+        button {
+            width: 220px;
+            padding: 16px;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            border: 0;
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            background: #f0c040;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        .info {
+            margin-top: 30px;
+
+            background: #232633;
+            border-radius: 12px;
+
+            padding: 20px;
+
+            text-align: left;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+
+            padding: 5px 0;
+        }
+
+        #message {
+            height: 30px;
+            margin: 20px;
+            font-size: 18px;
+        }
+
+        .free {
+            color: #7fe39a;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="game">
+
+    <h1>🎰 Teo Test Slot</h1>
+
+
+    <div class="reels">
+
+        <div
+            id="reel1"
+            class="reel"
+        >
+            🍒
+        </div>
+
+        <div
+            id="reel2"
+            class="reel"
+        >
+            🍋
+        </div>
+
+        <div
+            id="reel3"
+            class="reel"
+        >
+            🔔
+        </div>
+
+    </div>
+
+
+    <button id="spinButton">
+        SPIN
+    </button>
+
+
+    <div id="message">
+        Loading session...
+    </div>
+
+
+    <div class="info">
+
+        <div class="row">
+            <span>Balance</span>
+            <span id="balance">
+                -
+            </span>
+        </div>
+
+        <div class="row">
+            <span>Free spins</span>
+            <span
+                id="freeSpins"
+                class="free"
+            >
+                -
+            </span>
+        </div>
+
+        <div class="row">
+            <span>Bet</span>
+            <span id="betAmount">
+                -
+            </span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const launch = {
+    account_id:
+        "{{ launch.account_id }}",
+
+    session_id:
+        "{{ launch.session_id }}",
+
+    game_id: "1",
+
+    currency:
+        "{{ launch.currency }}"
+};
+
+
+const spinButton =
+    document.getElementById(
+        "spinButton"
+    );
+
+
+const reel1 =
+    document.getElementById("reel1");
+
+const reel2 =
+    document.getElementById("reel2");
+
+const reel3 =
+    document.getElementById("reel3");
+
+
+const balanceElement =
+    document.getElementById(
+        "balance"
+    );
+
+const freeSpinsElement =
+    document.getElementById(
+        "freeSpins"
+    );
+
+const betAmountElement =
+    document.getElementById(
+        "betAmount"
+    );
+
+const messageElement =
+    document.getElementById(
+        "message"
+    );
+
+
+function money(cents) {
+
+    if (
+        cents === undefined
+        || cents === null
+    ) {
+        return "-";
+    }
+
+    return (
+        (cents / 100).toFixed(2)
+        + " "
+        + launch.currency
+    );
+}
+
+
+async function loadSession() {
+
+    try {
+
+        const response = await fetch(
+            "/api/session",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    account_id:
+                        launch.account_id,
+
+                    session_id:
+                        launch.session_id
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (data.status !== "ok") {
+
+            messageElement.textContent =
+                "Session error";
+
+            return;
+        }
+
+
+        balanceElement.textContent =
+            money(data.balance);
+
+
+        const freeRounds =
+            data.freeround_limit || 0;
+
+
+        freeSpinsElement.textContent =
+            freeRounds;
+
+
+        if (freeRounds > 0) {
+
+            const bet =
+                data.freeround_lines
+                *
+                data
+                .freeround_bet_per_line_cents;
+
+
+            betAmountElement.textContent =
+                money(bet);
+
+
+            messageElement.textContent =
+                "Free Spin available!";
+
+        } else {
+
+            betAmountElement.textContent =
+                money(40);
+
+            messageElement.textContent =
+                "Ready";
+        }
+
+
+    } catch (error) {
+
+        messageElement.textContent =
+            "Failed to load session";
+
+        console.error(error);
+    }
+}
+
+
+async function spin() {
+
+    spinButton.disabled = true;
+
+    messageElement.textContent =
+        "Spinning...";
+
+
+    reel1.textContent = "❓";
+    reel2.textContent = "❓";
+    reel3.textContent = "❓";
+
+
+    try {
+
+        const response = await fetch(
+            "/api/spin",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    account_id:
+                        launch.account_id,
+
+                    session_id:
+                        launch.session_id,
+
+                    game_id:
+                        launch.game_id
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            messageElement.textContent =
+                "Transaction failed";
+
+            console.error(data);
+
+            spinButton.disabled = false;
+
+            return;
+        }
+
+
+        reel1.textContent =
+            data.reels[0];
+
+        reel2.textContent =
+            data.reels[1];
+
+        reel3.textContent =
+            data.reels[2];
+
+
+        balanceElement.textContent =
+            money(data.balance);
+
+
+        freeSpinsElement.textContent =
+            data.freeround_limit ?? 0;
+
+
+        betAmountElement.textContent =
+            money(
+                data.bet_amount_cents
+            );
+
+
+        if (
+            data.win_amount_cents > 0
+        ) {
+
+            messageElement.textContent =
+                "WIN! "
+                + money(
+                    data.win_amount_cents
+                );
+
+        } else {
+
+            messageElement.textContent =
+                "No win";
+        }
+
+
+        if (data.is_freeround) {
+
+            messageElement.textContent +=
+                " — Free Spin";
+        }
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        messageElement.textContent =
+            "Request failed";
+
+    } finally {
+
+        spinButton.disabled = false;
+    }
+}
+
+
+spinButton.addEventListener(
+    "click",
+    spin
+);
+
+
+loadSession();
+
+</script>
+
+</body>
+</html>
